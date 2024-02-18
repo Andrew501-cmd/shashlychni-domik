@@ -25,12 +25,18 @@ class Dish(models.Model):
     isBestseller = models.BooleanField(default = False, verbose_name='Хит продаж')
     isNew = models.BooleanField(default = False, verbose_name='Новый товар')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = 'Блюдо'
         verbose_name_plural = 'Блюда'
 
 class PaymentMethod(models.Model):
     method = models.CharField(max_length=255, verbose_name='Способ оплаты')
+
+    def __str__(self):
+        return self.method
 
     class Meta:
         verbose_name = 'Способ оплаты'
@@ -39,6 +45,9 @@ class PaymentMethod(models.Model):
 class OrderStatus(models.Model):
     status = models.CharField(max_length=255, verbose_name='Статус')
 
+    def __str__(self):
+        return self.status
+    
     class Meta:
         verbose_name = 'Статус заказа'
         verbose_name_plural = 'Статусы заказа'
@@ -46,6 +55,10 @@ class OrderStatus(models.Model):
 class PromotionalCode(models.Model):
     code = models.CharField(max_length=255, verbose_name='Промокод')
     user = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Владелец', blank=True)
+    discount = models.PositiveSmallIntegerField(verbose_name='Процент скидки')
+
+    def __str__(self):
+        return self.code
 
     class Meta:
         verbose_name = 'Промокод'
@@ -59,7 +72,10 @@ class Address(models.Model):
     structure = models.CharField(max_length=255, verbose_name='Строение', blank=True)
     floor = models.CharField(max_length=255, verbose_name='Этаж')
     apartment = models.CharField(max_length=255, verbose_name='Квартира')
-    code = models.CharField(max_length=255, verbose_name='Код домофона')
+    code = models.CharField(max_length=255, verbose_name='Код домофона', blank=True)
+
+    def __str__(self):
+        return 'Город ' + self.city + ', Ул. ' + self.street + ', Дом ' + self.house + ', Кв. ' + self.apartment
 
     class Meta:
         verbose_name = 'Адрес заказа'
@@ -67,7 +83,7 @@ class Address(models.Model):
 
 class Order(models.Model):
     anonymous = models.BooleanField(verbose_name='Аноним')
-    user = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Заказчик', blank=True)
+    user = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Заказчик', blank=True, null=True)
     name = models.CharField(max_length=255, verbose_name='Имя', blank=True)
     surname = models.CharField(max_length=255, verbose_name='Фамилия', blank=True)
     patronymic = models.CharField(max_length=255, verbose_name='Отчество', blank=True)
@@ -75,12 +91,13 @@ class Order(models.Model):
     email = models.EmailField(verbose_name='Почта', blank=True)
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     address = models.OneToOneField(Address, on_delete = models.PROTECT, verbose_name='Адрес')
-    date_delivery = models.DateTimeField(verbose_name='Время доставки', blank=True)
+    date_delivery = models.DateTimeField(verbose_name='Время доставки', blank=True, null=True)
     payment_method = models.ForeignKey(PaymentMethod, on_delete = models.PROTECT, verbose_name = 'Способ оплаты')
     status = models.ForeignKey(OrderStatus, on_delete = models.PROTECT, verbose_name = 'Статус')
-    promotional_code = models.ForeignKey(PromotionalCode, on_delete = models.PROTECT, verbose_name = 'Промокод', blank=True)
+    promotional_code = models.ForeignKey(PromotionalCode, on_delete = models.PROTECT, verbose_name = 'Промокод', blank=True, null=True)
     cutlery = models.PositiveSmallIntegerField(verbose_name='Количество столовых приборов')
     comment = models.TextField(verbose_name = 'Комментарий', blank=True)
+    menu = models.ManyToManyField(Dish, verbose_name='Заказ')
 
     class Meta:
         verbose_name = 'Заказ'

@@ -35,7 +35,7 @@ class SaveAddress(models.Model):
     structure = models.CharField(max_length=255, verbose_name='Строение', blank=True)
     floor = models.CharField(max_length=255, verbose_name='Этаж')
     apartment = models.CharField(max_length=255, verbose_name='Квартира')
-    code = models.CharField(max_length=255, verbose_name='Код домофона')
+    code = models.CharField(max_length=255, verbose_name='Код домофона', blank=True)
 
     class Meta:
         verbose_name = 'Сохраненный адрес'
