@@ -82,7 +82,7 @@ class Address(models.Model):
         verbose_name_plural = 'Адреса заказов'
 
 class Order(models.Model):
-    anonymous = models.BooleanField(verbose_name='Аноним')
+    #anonymous = models.BooleanField(verbose_name='Аноним')
     user = models.ForeignKey(User, on_delete = models.PROTECT, verbose_name = 'Заказчик', blank=True, null=True)
     name = models.CharField(max_length=255, verbose_name='Имя', blank=True)
     surname = models.CharField(max_length=255, verbose_name='Фамилия', blank=True)

@@ -31,7 +31,7 @@ class AddressAdmin(admin.ModelAdmin):
     lest_display_links = ['id' ]
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'anonymous', 'user', 'name', 'surname', 'phone', 'email', 'date_create', 'address', 'date_delivery', 'status', 'promotional_code', 'cutlery', 'comment' ]
+    list_display = ['id', 'user', 'name', 'surname', 'phone', 'email', 'date_create', 'address', 'date_delivery', 'status', 'promotional_code', 'cutlery', 'comment' ]
 
 admin.site.register(Dish, DishAdmin)
 admin.site.register(Section, SectionAdmin)
